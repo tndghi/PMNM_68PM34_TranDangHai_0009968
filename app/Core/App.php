@@ -11,7 +11,7 @@ class App
         //     echo($_GET['url']);
         // }
         $urlProcessed = $this->UrlProcess();  //mảng url đã được xử lý
-        //var_dump($urlProcessed);
+        // var_dump($urlProcessed);
         if (isset($urlProcessed[0])) {
             if (file_exists('../app/controllers/' . $urlProcessed[0] . '.php')) {
                 $this->controller = $urlProcessed[0];
