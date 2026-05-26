@@ -3,7 +3,7 @@
 class home{
 
     public function index(){
-        echo "Đây là trang chủ";
+        require_once '../app/Views/home/index.php';
     }
     public function login(){
         require_once '../app/Views/home/login.php';
