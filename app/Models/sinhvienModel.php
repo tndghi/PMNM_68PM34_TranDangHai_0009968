@@ -25,5 +25,23 @@ class sinhvienModel{
             return [];
         }
     }
+
+    //phương thức để thêm một sinh viên mới vào cơ sở dữ liệu
+    public function addSinhVien($hoten, $mssv, $gioitinh) {
+        $sql = "INSERT INTO sinhvien (hoten, mssv, gioitinh) VALUES (:hoten, :mssv, :gioitinh)";
+        try {
+            //chuẩn bị truy vấn SQL
+            $stmt = $this->conn->prepare($sql);
+            //liên kết các tham số với giá trị tương ứng
+            $stmt->bindParam(':hoten', $hoten);
+            $stmt->bindParam(':mssv', $mssv);
+            $stmt->bindParam(':gioitinh', $gioitinh);
+            //thực thi truy vấn
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo "Lỗi truy vấn: " . $e->getMessage();
+            return false;
+        }
+    }
 }
-?>

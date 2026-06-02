@@ -2,10 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tạo sinh viên</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Thêm sinh viên</title>
 </head>
 <body>
-    <h1>Tạo sinh viên</h1>
+    <h1>Thêm sinh viên</h1>
+    <form action="/sinhvien/store" method="post">
+        <label for="hoten">Tên:</label>
+        <input type="text" id="hoten" name="hoten" required><br><br>
+        <label for="mssv">MSSV:</label>
+        <input type="text" id="mssv" name="mssv" required><br><br>
+        <label for="gioitinh">Giới tính:</label>
+        <select id="gioitinh" name="gioitinh" required>
+            <option value="Nam">Nam</option>
+            <option value="Nữ">Nữ</option>
+        </select><br><br>
+        <button type="submit">Thêm</button>
+    </form>
 </body>
 </html>
