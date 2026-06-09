@@ -9,7 +9,7 @@
         * { 
         margin: 0; 
         padding: 0; 
-        /* box-sizing: border-box;  */
+        box-sizing: border-box; 
     }
 
         html, body {
@@ -18,14 +18,14 @@
 
         body {
             display: flex;
-            flex-direction: column;   /* xếp dọc: header → content → footer */
-            min-height: 100vh;        /* chiều cao tối thiểu = full màn hình */
+            flex-direction: column;   
+            min-height: 100vh;       
             background: #f5f5f5;
             font-family: 'Segoe UI', sans-serif;
         }
 
         .content {
-            flex: 1;        /* content chiếm hết phần còn lại, đẩy footer xuống đáy */
+            flex: 1;        
             padding: 20px;
         }
     </style>
