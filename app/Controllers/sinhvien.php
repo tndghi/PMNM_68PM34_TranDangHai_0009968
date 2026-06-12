@@ -55,7 +55,17 @@ class sinhvien extends Controller{
         $this->view('sinhvien/edit', ['sinhvien' => $sinhvien]);
     }
 
-
+    public function delete($id) {
+        //xóa sinh viên theo id và chuyển hướng về trang danh sách
+        $sinhvienModel = $this->model('sinhvienModel');
+        $result = $sinhvienModel->deleteSinhVien($id);
+        if ($result) {
+            header('Location: /sinhvien/index');
+            exit();
+        } else {
+            echo "Lỗi khi xóa sinh viên.";
+        }
+    }
 
     public function update() {
     if (isset($_POST['id'], $_POST['hoten'], $_POST['mssv'], $_POST['gioitinh'])) 
