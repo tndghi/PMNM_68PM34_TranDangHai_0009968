@@ -48,6 +48,31 @@ class sinhvien extends Controller{
         }
     } 
     
+    public function edit($id) {
+        //lấy thông tin sinh viên theo id và trả về trang chỉnh sửa
+        $sinhvienModel = $this->model('sinhvienModel');
+        $sinhvien = $sinhvienModel->getSinhVienById($id);
+        $this->view('sinhvien/edit', ['sinhvien' => $sinhvien]);
+    }
 
-    
+
+
+    public function update() {
+    if (isset($_POST['id'], $_POST['hoten'], $_POST['mssv'], $_POST['gioitinh'])) 
+        {
+            $id       = $_POST['id'];
+            $hoten    = $_POST['hoten'];
+            $mssv     = $_POST['mssv'];
+            $gioitinh = $_POST['gioitinh'];
+
+            $sinhvienModel = $this->model('sinhvienModel');
+            $result = $sinhvienModel->updateSinhVien($id, $hoten, $mssv, $gioitinh);
+            if ($result) {
+                header('Location: /sinhvien/index');
+                exit();
+            } else {
+                echo "Lỗi khi cập nhật sinh viên.";
+            }
+        }
+    }
 }

@@ -84,6 +84,104 @@
         }
         .male   { background: #E6F1FB; color: #0C447C; }
         .female { background: #FBEAF0; color: #72243E; }
+    .bottom-actions {
+            display: flex;
+            justify-content: space-between; 
+            align-items: center;
+            margin-top: 16px;
+        }
+
+        .add-button a {
+            display: inline-block;
+            background-color: #0C447C; 
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .add-button a:hover {
+            background-color: #083058;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 6px;
+        }
+
+        .pagination a, .pagination span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 32px;
+            height: 32px;
+            padding: 0 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            text-decoration: none;
+            color: #555;
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            transition: all 0.2s;
+        }
+
+        .pagination a:hover {
+            border-color: #0C447C;
+            color: #0C447C;
+        }
+
+        .pagination .active {
+            background: #0C447C;
+            color: #fff;
+            border-color: #0C447C;
+            font-weight: bold;
+            pointer-events: none;
+        }
+
+        .pagination .disabled {
+            color: #bbb;
+            background: #fafafa;
+            pointer-events: none;
+        }
+
+        .action-cell a {
+            margin-right: 8px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .btn-edit, .btn-delete {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .btn-edit {
+            background-color: #4CAF50; 
+        }
+
+        .btn-edit:hover {
+            background-color: #3e8e41;
+        }
+
+        .btn-delete {
+            background-color: #f44336; 
+        }
+
+        .btn-delete:hover {
+            background-color: #da190b;
+        }
+
     </style>
 </head>
 <body>
@@ -98,6 +196,7 @@
                         <th>Họ tên</th>
                         <th>MSSV</th>
                         <th>Giới tính</th>
+                        <th>Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -111,11 +210,46 @@
                                 <?= $sinhvien['gioitinh'] ?>
                             </span>
                         </td>
+                        </td>
+                        <td class="action-cell">
+                            <a href="/sinhvien/edit/<?= $sinhvien['id'] ?>" class="btn-edit">Sửa</a>
+                            <a href="/sinhvien/delete/<?= $sinhvien['id'] ?>" class="btn-delete"
+                               onclick="return confirm('Xóa sinh viên này?')">Xóa</a>
+                        </td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
-    </div>
+        <div class="bottom-actions">
+            <div class="add-button">
+                <a href="/sinhvien/create">+ Thêm sinh viên</a>
+            </div>
+            <div class="pagination">
+                <?php 
+                    $current = $currentPage ?? 1;
+                    $total = $totalPages ?? 1;
+                    $url = "?page="; 
+                ?>
+                <?php if ($current > 1): ?>
+                    <a href="<?= $url . ($current - 1) ?>">&laquo; Trước</a>
+                <?php else: ?>
+                    <span class="disabled">&laquo; Trước</span>
+                <?php endif; ?>
+                <?php for ($i = 1; $i <= $total; $i++): ?>
+                    <?php if ($i == $current): ?>
+                        <span class="active"><?= $i ?></span>
+                    <?php else: ?>
+                        <a href="<?= $url . $i ?>"><?= $i ?></a>
+                    <?php endif; ?>
+                <?php endfor; ?>
+                <?php if ($current < $total): ?>
+                    <a href="<?= $url . ($current + 1) ?>">Tiếp &raquo;</a>
+                <?php else: ?>
+                    <span class="disabled">Tiếp &raquo;</span>
+                <?php endif; ?>
+            </div>
+        </div>      
+    </div>   
 </body>
 </html>
