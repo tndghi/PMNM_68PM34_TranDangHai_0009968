@@ -182,11 +182,72 @@
             background-color: #da190b;
         }
 
+        .search-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .search-bar input, .search-bar select {
+            padding: 8px 12px;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            background: #fff;
+        }
+        .search-bar input:focus, .search-bar select:focus {
+            border-color: #0C447C;
+        }
+        .search-bar button {
+            padding: 8px 16px;
+            background: #0C447C;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .search-bar button:hover { background: #083058; }
+        .search-bar .btn-reset {
+            background: #f5f5f5;
+            color: #555;
+            border: 1px solid #e5e5e5;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .sort-link { color: #888; text-decoration: none; font-size: 11px; }
+        .sort-link.active { color: #0C447C; font-weight: bold; }
+
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Danh sách sinh viên</h1>
+        <form class="search-bar" method="GET" action="/sinhvien/index">
+            <input type="text" name="keyword" placeholder="Tìm theo họ tên..."
+                value="<?= htmlspecialchars($keyword ?? '') ?>">
+
+            <select name="sortBy">
+                <option value="hoten"  <?= ($sortBy ?? '') === 'hoten'  ? 'selected' : '' ?>>Sắp xếp: Họ tên</option>
+                <option value="mssv"   <?= ($sortBy ?? '') === 'mssv'   ? 'selected' : '' ?>>Sắp xếp: MSSV</option>
+                <option value="malop"  <?= ($sortBy ?? '') === 'malop'  ? 'selected' : '' ?>>Sắp xếp: Lớp</option>
+                <option value="mssv_asc"  <?= ($sortBy ?? '') === 'mssv_asc'  ? 'selected' : '' ?>>Sắp xếp: MSSV (nhỏ → lớn)</option>
+                <option value="mssv_desc" <?= ($sortBy ?? '') === 'mssv_desc' ? 'selected' : '' ?>>Sắp xếp: MSSV (lớn → nhỏ)</option>
+            </select>
+
+            <select name="sortOrder">
+                <option value="ASC"  <?= ($sortOrder ?? '') === 'ASC'  ? 'selected' : '' ?>>A → Z</option>
+                <option value="DESC" <?= ($sortOrder ?? '') === 'DESC' ? 'selected' : '' ?>>Z → A</option>
+            </select>
+
+            <button type="submit">Tìm kiếm</button>
+            <a href="/sinhvien/index" class="btn-reset">Xóa lọc</a>
+        </form>
 
         <div class="table-wrap">
             <table>
@@ -195,16 +256,19 @@
                         <th>ID</th>
                         <th>Họ tên</th>
                         <th>MSSV</th>
+                        <th>Lớp</th> 
                         <th>Giới tính</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
+                <?php $stt = ($offset ?? 0) + 1; ?>
                 <tbody>
                     <?php foreach (($sinhviens ?? []) as $sinhvien): ?>
                     <tr>
-                        <td class="id-cell">#<?= str_pad($sinhvien['id'], 2, '0', STR_PAD_LEFT) ?></td>
+                        <td class="id-cell"><?= str_pad($stt++, 2, '0', STR_PAD_LEFT) ?></td>
                         <td class="name-cell"><?= $sinhvien['hoten'] ?></td>
                         <td class="mssv-cell"><?= $sinhvien['mssv'] ?></td>
+                        <td><?= $sinhvien['tenlop'] ?? '<span style="color:#bbb">Chưa có</span>' ?></td> 
                         <td>
                             <span class="gender-badge <?= $sinhvien['gioitinh'] === 'Nam' ? 'male' : 'female' ?>">
                                 <?= $sinhvien['gioitinh'] ?>
@@ -212,9 +276,18 @@
                         </td>
                         </td>
                         <td class="action-cell">
-                            <a href="/sinhvien/edit/<?= $sinhvien['id'] ?>" class="btn-edit">Sửa</a>
-                            <a href="/sinhvien/delete/<?= $sinhvien['id'] ?>" class="btn-delete"
-                               onclick="return confirm('Xóa sinh viên này?')">Xóa</a>
+                            <?php
+                            $queryString = http_build_query([
+                                'page'      => $currentPage ?? 1,
+                                'keyword'   => $keyword   ?? '',
+                                'malop'     => $malop     ?? '',
+                                'sortBy'    => $sortBy    ?? 'hoten',
+                                'sortOrder' => $sortOrder ?? 'ASC',
+                            ]);
+                            ?>
+                            <a href="/sinhvien/edit/<?= $sinhvien['id'] ?>?<?= $queryString ?>" class="btn-edit">Sửa</a>
+                            <a href="/sinhvien/delete/<?= $sinhvien['id'] ?>?<?= $queryString ?>" class="btn-delete"
+                            onclick="return confirm('Xóa sinh viên này?')">Xóa</a>
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -227,9 +300,15 @@
             </div>
             <div class="pagination">
                 <?php 
-                    $current = $currentPage ?? 1;
-                    $total = $totalPages ?? 1;
-                    $url = "?page="; 
+                    $current   = $currentPage ?? 1;
+                    $total     = $totalPages  ?? 1;
+                    $params    = http_build_query([
+                        'keyword'   => $keyword   ?? '',
+                        'malop'     => $malop     ?? '',
+                        'sortBy'    => $sortBy    ?? 'hoten',
+                        'sortOrder' => $sortOrder ?? 'ASC',
+                    ]);
+                    $url = "?$params&page=";
                 ?>
                 <?php if ($current > 1): ?>
                     <a href="<?= $url . ($current - 1) ?>">&laquo; Trước</a>
