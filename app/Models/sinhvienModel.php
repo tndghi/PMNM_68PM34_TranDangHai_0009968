@@ -160,4 +160,19 @@ class sinhvienModel {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function isMssvExists($mssv, $excludeId = null) {
+        if ($excludeId) {
+            $sql = "SELECT COUNT(*) FROM sinhvien WHERE mssv = :mssv AND id != :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindValue(':mssv', $mssv);
+            $stmt->bindValue(':id', $excludeId, PDO::PARAM_INT);
+        } else {
+            $sql = "SELECT COUNT(*) FROM sinhvien WHERE mssv = :mssv";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindValue(':mssv', $mssv);
+        }
+        $stmt->execute();
+        return (int)$stmt->fetchColumn() > 0;
+    }
 }

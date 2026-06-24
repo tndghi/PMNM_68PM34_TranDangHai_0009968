@@ -255,6 +255,13 @@
                 <option value="DESC" <?= ($sortOrder ?? '') === 'DESC' ? 'selected' : '' ?>>Z → A</option>
             </select>
 
+            <select name="pageSize">
+                <option value="5"  <?= ($pageSize ?? 6) == 5  ? 'selected' : '' ?>>5 / trang</option>
+                <option value="6"  <?= ($pageSize ?? 6) == 6  ? 'selected' : '' ?>>6 / trang</option>
+                <option value="10" <?= ($pageSize ?? 6) == 10 ? 'selected' : '' ?>>10 / trang</option>
+                <option value="20" <?= ($pageSize ?? 6) == 20 ? 'selected' : '' ?>>20 / trang</option>
+            </select>
+
             <button type="submit">Tìm kiếm</button>
             <a href="/sinhvien/index" class="btn-reset">Xóa lọc</a>
         </form>
@@ -289,10 +296,11 @@
                             <?php
                             $queryString = http_build_query([
                                 'page'      => $currentPage ?? 1,
-                                'keyword'   => $keyword   ?? '',
-                                'malop'     => $malop     ?? '',
-                                'sortBy'    => $sortBy    ?? 'hoten',
-                                'sortOrder' => $sortOrder ?? 'ASC',
+                                'keyword'   => $keyword     ?? '',
+                                'malop'     => $malop       ?? '',
+                                'sortBy'    => $sortBy      ?? 'hoten',
+                                'sortOrder' => $sortOrder   ?? 'ASC',
+                                'pageSize'  => $pageSize    ?? 6,
                             ]);
                             ?>
                             <a href="/sinhvien/edit/<?= $sinhvien['id'] ?>?<?= $queryString ?>" class="btn-edit">Sửa</a>
@@ -306,18 +314,19 @@
         </div>
         <div class="bottom-actions">
             <div class="add-button">
-                <a href="/sinhvien/create">+ Thêm sinh viên</a>
+                <a href="/sinhvien/create?page=<?= $currentPage ?? 1 ?>&pageSize=<?= $pageSize ?? 6 ?>">+ Thêm sinh viên</a>
             </div>
             <div class="pagination">
                 <?php 
                     $current   = $currentPage ?? 1;
                     $total     = $totalPages  ?? 1;
-                    $params    = http_build_query([
+                    $params = http_build_query([
                         'keyword'   => $keyword   ?? '',
                         'malop'     => $malop     ?? '',
                         'sortBy'    => $sortBy    ?? 'hoten',
                         'sortOrder' => $sortOrder ?? 'ASC',
-                    ]);
+                        'pageSize'  => $pageSize  ?? 6,
+                    ]);                   
                     $url = "?$params&page=";
                 ?>
                 <?php if ($current > 1): ?>

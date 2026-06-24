@@ -1,13 +1,11 @@
 <?php
+require_once '../app/middleware.php';
 
-class home{
-
-    public function index(){
+class home {
+    public function index() {
+        $middleware = new middleware();
+        $middleware->checkLogin();
         require_once '../app/Views/home/index.php';
-        // require_once '../app/Views/layout/masterlayout.php';
     }
-    public function login(){
-        require_once '../app/Views/home/login.php';
-    }
-
 }
+?>

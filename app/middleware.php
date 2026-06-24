@@ -1,13 +1,9 @@
 <?php
-require_once '../app/core/App.php';
-
-session_start();
-
-class middleware{
-    public function checkLogin(){
-        $publicPages = ['/home/login'];
-        if(!isset($_SESSION['username']) && !in_array($_SERVER['REQUEST_URI'], $publicPages)){
-            header('Location: /home/login');
+class middleware {
+    public function checkLogin() {
+        $url = trim($_GET['url'] ?? '', '/');
+        if (!isset($_SESSION['username']) && $url !== 'auth/login' && $url !== 'auth/loginProcess') {
+            header('Location: /auth/login');
             exit();
         }
     }

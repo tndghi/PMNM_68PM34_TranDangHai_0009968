@@ -3,59 +3,149 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sửa sinh viên</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: sans-serif; background: #f5f5f5; color: #1a1a1a; }
-        .container { padding: 2rem; max-width: 480px; margin: 0 auto; }
-        h1 { font-size: 22px; font-weight: 500; margin-bottom: 1.5rem; }
-        .card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1.5rem; }
-        .form-group { margin-bottom: 1rem; }
-        label { display: block; font-size: 13px; color: #888; margin-bottom: 4px; }
-        input, select {
-            width: 100%; padding: 8px 12px;
-            border: 1px solid #e5e5e5; border-radius: 8px;
-            font-size: 14px; outline: none;
+        body { font-family: sans-serif; background: #f5f5f5; color: #1a1a1a; min-height: 100vh; display: flex; flex-direction: column; }
+        main { flex: 1; padding: 2rem 24px; display: flex; flex-direction: column; align-items: center; }
+        h1 { font-size: 22px; font-weight: 500; margin-bottom: 1.5rem; text-align: center; }
+        .form-card {
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 1.75rem 2rem;
+            width: 100%;
+            max-width: 480px;
         }
-        input:focus, select:focus { border-color: #0C447C; }
-        .btn-save {
-            background: #0C447C; color: #fff;
-            padding: 10px 20px; border: none;
-            border-radius: 8px; font-size: 14px;
-            font-weight: 500; cursor: pointer;
+        .field { margin-bottom: 1.1rem; }
+        .field label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
         }
-        .btn-save:hover { background: #083058; }
-        .btn-cancel {
-            color: #555; text-decoration: none;
-            font-size: 14px; margin-left: 12px;
+        .field input, .field select {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.15s;
+            background: #fff;
         }
+        .field input:focus, .field select:focus { border-color: #0C447C; }
+        .form-actions { display: flex; gap: 10px; margin-top: 1.5rem; }
+        .btn-submit {
+            padding: 10px 20px;
+            background: #0C447C;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+        .btn-submit:hover { background: #083058; }
+        .btn-back {
+            padding: 10px 20px;
+            background: #fff;
+            color: #555;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: border-color 0.15s;
+        }
+        .btn-back:hover { border-color: #0C447C; color: #0C447C; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Sửa sinh viên</h1>
-        <div class="card">
-            <form action="/sinhvien/update" method="POST">
-                <input type="hidden" name="id" value="<?= $sinhvien['id'] ?>">
-                <div class="form-group">
-                    <label>Họ tên</label>
-                    <input type="text" name="hoten" value="<?= $sinhvien['hoten'] ?>" required>
-                </div>
-                <div class="form-group">
-                    <label>MSSV</label>
-                    <input type="text" name="mssv" value="<?= $sinhvien['mssv'] ?>" required>
-                </div>
-                <div class="form-group">
-                    <label>Giới tính</label>
-                    <select name="gioitinh">
-                        <option value="Nam"   <?= $sinhvien['gioitinh'] === 'Nam'   ? 'selected' : '' ?>>Nam</option>
-                        <option value="Nữ"    <?= $sinhvien['gioitinh'] === 'Nữ'    ? 'selected' : '' ?>>Nữ</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-save">Lưu</button>
-                <a href="/sinhvien/index" class="btn-cancel">Hủy</a>
-            </form>
-        </div>
+
+<?php include __DIR__ . '/../layout/partial/header.php'; ?>
+
+<main>
+    <h1>Sửa sinh viên</h1>
+    <div class="form-card">
+
+         <?php if (!empty($error)): ?>
+            <div style="
+                background: #FCEBEB;
+                color: #A32D2D;
+                border-radius: 8px;
+                padding: 10px 14px;
+                font-size: 13px;
+                margin-bottom: 1.1rem;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            ">
+                <i class="ti ti-alert-circle" style="font-size:16px;flex-shrink:0;"></i>
+                <?= htmlspecialchars($error) ?>
+            </div>
+        <?php endif; ?>
+
+        <form action="/sinhvien/update" method="POST">
+            <input type="hidden" name="id"   value="<?= $sinhvien['id'] ?>">
+            <input type="hidden" name="page" value="<?= $page ?? 1 ?>">
+
+            <div class="field">
+                <label>Họ tên</label>
+                <input type="text" name="hoten"
+                       value="<?= htmlspecialchars($sinhvien['hoten'] ?? '') ?>" required>
+            </div>
+            <div class="field">
+                <label>MSSV</label>
+                <input type="text" name="mssv"
+                       value="<?= htmlspecialchars($sinhvien['mssv'] ?? '') ?>" required>
+            </div>
+            <div class="field">
+                <label>Giới tính</label>
+                <select name="gioitinh">
+                    <option value="Nam" <?= ($sinhvien['gioitinh'] ?? '') === 'Nam' ? 'selected' : '' ?>>Nam</option>
+                    <option value="Nữ"  <?= ($sinhvien['gioitinh'] ?? '') === 'Nữ'  ? 'selected' : '' ?>>Nữ</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Lớp</label>
+                <select name="malop">
+                    <option value="">-- Chưa có lớp --</option>
+                    <?php foreach (($danhSachLop ?? []) as $lop): ?>
+                        <option value="<?= htmlspecialchars($lop['malop']) ?>"
+                            <?= ($sinhvien['malop'] ?? '') === $lop['malop'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($lop['tenlop']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">
+                    <i class="ti ti-device-floppy" style="font-size:14px;"></i>
+                    Lưu thay đổi
+                </button>
+                <a href="/sinhvien/index?page=<?= $page ?? 1 ?>" class="btn-back">
+                    <i class="ti ti-arrow-left" style="font-size:14px;"></i>
+                    Quay lại
+                </a>
+            </div>
+        </form>
     </div>
+</main>
+
+<?php include __DIR__ . '/../layout/partial/footer.php'; ?>
+
 </body>
 </html>

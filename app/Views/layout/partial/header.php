@@ -16,15 +16,25 @@
             <div style="font-size:11px;color:#a8c0d6;">Trường Đại học ABC</div>
         </div>
     </div>
-    <nav style="display:flex;gap:4px;">
-        <a href="/" style="color:#a8c0d6;text-decoration:none;font-size:13px;padding:6px 12px;border-radius:6px;display:flex;align-items:center;gap:6px;">
+    <nav style="display:flex;gap:4px;align-items:center;">
+        <a href="/home/index" style="color:#a8c0d6;text-decoration:none;font-size:13px;padding:6px 12px;border-radius:6px;display:flex;align-items:center;gap:6px;">
             <i class="ti ti-home"></i>Trang chủ
         </a>
-        <a href="/sinhvien" style="color:#a8c0d6;text-decoration:none;font-size:13px;padding:6px 12px;border-radius:6px;display:flex;align-items:center;gap:6px;">
-            <i class="ti ti-users"></i>Sinh viên
+        <a href="/sinhvien/index" style="color:#a8c0d6;text-decoration:none;font-size:13px;padding:6px 12px;border-radius:6px;display:flex;align-items:center;gap:6px;">
+            <i class="ti ti-users"></i>Quản lý sinh viên
         </a>
-        <a href="/baocao" style="color:#a8c0d6;text-decoration:none;font-size:13px;padding:6px 12px;border-radius:6px;display:flex;align-items:center;gap:6px;">
-            <i class="ti ti-report"></i>Báo cáo
+        <a href="/auth/logout" style="
+            margin-left:8px;
+            color:#f4a0a0;
+            text-decoration:none;
+            font-size:13px;
+            padding:6px 12px;
+            border-radius:6px;
+            border:1px solid rgba(220,80,80,0.35);
+            display:flex;align-items:center;gap:6px;
+            transition:background 0.15s;
+        " onmouseover="this.style.background='rgba(220,80,80,0.15)'" onmouseout="this.style.background='transparent'">
+            <i class="ti ti-logout"></i>Đăng xuất
         </a>
     </nav>
 </header>
